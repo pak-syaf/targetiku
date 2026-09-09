@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Target IKU Dosen & Tendik - STKIP Al Hikmah Surabaya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              500: '#15803d',
+              600: '#166534',
+              700: '#14532d',
+              800: '#0f3e22',
+              900: '#062814',
+              gold: '#d97706',
+              goldLight: '#fef3c7'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 9pt;
+        margin: 0;
+        padding: 0;
+      }
+      .no-print, header, footer, #ikuForm, #printPreviewModal, #resetModal, #toastNotification {
+        display: none !important;
+      }
+      #printableDocumentArea {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      table {
+        page-break-inside: auto;
+        border-collapse: collapse !important;
+        width: 100% !important;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      th, td {
+        border: 1px solid #334155 !important;
+        padding: 5px 8px !important;
+        font-size: 8.5pt !important;
+      }
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .print-only {
+      display: none;
+    }
+    /* Kustomisasi scrollbar halus */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <header class="no-print bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 text-white shadow-md sticky top-0 z-50 border-b border-brand-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <div class="flex items-center space-x-3.5">
+          <!-- Area Logo Kampus Resmi -->
+          <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-white/10 backdrop-blur-md p-1.5 flex items-center justify-center border border-white/20 shadow-inner overflow-hidden shrink-0">
+            <img id="headerLogoImg" src="Logo stkiph png.png" alt="Logo STKIP Al Hikmah" 
+              class="w-full h-full object-contain"
+              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='logo.png';}">
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="inline-block bg-amber-400/25 text-amber-200 text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase border border-amber-400/40">Sistem Penjaminan Mutu & IKU</span>
+              <span class="inline-flex items-center gap-1 text-[11px] text-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Form Aktif
+              </span>
+            </div>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">STKIP AL HIKMAH SURABAYA</h1>
+            <p class="text-xs text-brand-100 hidden sm:block">Formulir Laporan Target Indikator Kinerja Utama (IKU) Dosen & Tendik &bull; Mencetak Pendidik Religius dan Profesional</p>
+          </div>
+        </div>
+
+        <!-- Action Tools -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <button type="button" onclick="fillDemoData()" class="px-3 py-2 text-xs sm:text-sm font-medium bg-white/15 hover:bg-white/25 rounded-lg border border-white/20 transition flex items-center gap-1.5 text-white" title="Isi form otomatis dengan contoh data">
+            <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span class="hidden md:inline">Contoh Isian Target</span>
+            <span class="md:hidden">Contoh</span>
+          </button>
+          
+          <button type="button" onclick="saveDraft()" class="px-3 py-2 text-xs sm:text-sm font-medium bg-emerald-700 hover:bg-emerald-600 rounded-lg border border-emerald-500 transition flex items-center gap-1.5 text-white shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            <span class="hidden sm:inline">Simpan Draft</span>
+          </button>
+
+          <button type="button" onclick="openPrintPreview()" class="px-3.5 py-2 text-xs sm:text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-lg shadow-sm transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Cetak Dokumen</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    
+    <!-- Notification Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 bg-slate-900 text-white text-sm px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700">
+      <span id="toastIcon" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+      <span id="toastMessage">Pesan tersimpan</span>
+    </div>
+
+    <!-- Area Cetak Resmi (Hanya tampil saat mode cetak browser aktif) -->
+    <div id="printableDocumentArea" class="print-only">
+      <!-- Konten dokumen resmi siap cetak akan dirender secara dinamis oleh JavaScript -->
+    </div>
+
+    <form id="ikuForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+      
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-brand-700 to-brand-600 px-6 py-4 text-white flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">1</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Identitas Resmi Dosen / Tendik</h2>
+              <p class="text-xs text-brand-100">Biodata dan penugasan resmi di STKIP Al Hikmah Surabaya</p>
+            </div>
+          </div>
+          <span class="text-xs bg-amber-400/20 text-amber-200 border border-amber-400/30 px-2.5 py-1 rounded-full font-medium">Wajib Diisi</span>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            <!-- Kolom Foto Resmi (Berdampingan di sebelah kiri) -->
+            <div class="md:col-span-4 lg:col-span-3 flex flex-col items-center text-center p-5 bg-slate-50 rounded-2xl border border-slate-200">
+              <div class="relative group mb-3">
+                <div class="w-36 h-48 sm:w-40 sm:h-52 rounded-xl overflow-hidden bg-slate-200 border-2 border-dashed border-slate-300 shadow-inner flex items-center justify-center relative">
+                  <img id="photoPreview" src="https://placehold.co/400x520/e2e8f0/475569?text=Pas+Foto+Resmi" alt="Foto Resmi" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium cursor-pointer" onclick="document.getElementById('photoInput').click()">
+                    <span>Pilih Foto</span>
+                  </div>
+                </div>
+                <label for="photoInput" class="absolute -bottom-2 -right-2 bg-brand-600 hover:bg-brand-500 text-white p-2 rounded-full shadow-md cursor-pointer transition no-print" title="Unggah Foto">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </label>
+              </div>
+
+              <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+              
+              <div class="space-y-1">
+                <span class="text-xs font-bold text-slate-700 block uppercase tracking-wider">Pas Foto Resmi</span>
+                <p class="text-[11px] text-slate-500 leading-tight">Busana formal syar'i / jas institusi</p>
+              </div>
+
+              <div class="mt-3 flex gap-2 no-print">
+                <button type="button" onclick="document.getElementById('photoInput').click()" class="text-xs px-2.5 py-1.5 bg-white hover:bg-slate-100 text-brand-700 border border-slate-300 rounded-lg font-medium transition shadow-xs">
+                  Unggah Foto
+                </button>
+                <button type="button" onclick="resetPhoto()" class="text-xs px-2.5 py-1.5 bg-white hover:bg-red-50 text-red-600 border border-slate-300 rounded-lg font-medium transition shadow-xs">
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Kolom Isian Identitas Dosen/Tendik -->
+            <div class="md:col-span-8 lg:col-span-9 space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Nama dosen dengan gelar -->
+                <div class="sm:col-span-2">
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    Nama Dosen / Tendik dengan Gelar Lengkap <span class="text-red-500">*</span>
+                  </label>
+                  <input type="text" id="namaGelar" name="namaGelar" required
+                    placeholder="Contoh: Dr. H. Ahmad Faiz, M.Pd. / Ustadz Wildan, M.Pd. / Fulanah, S.Kom." 
+                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none transition">
+                </div>
+
+                <!-- NIDN / NIP -->
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    NIDN / NUPTK / NIP
+                  </label>
+                  <input type="text" id="nidn" name="nidn" placeholder="Contoh: 0715088901 / NIP Tendik"
+                    class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none transition">
+                </div>
+
+                <!-- Program Studi -->
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    Program Studi / Kategori <span class="text-red-500">*</span>
+                  </label>
+                  <select id="programStudi" name="programStudi" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none transition">
+                    <option value="">-- Pilih Program Studi / Tendik --</option>
+                    <option value="Pendidikan Matematika">Pendidikan Matematika</option>
+                    <option value="Pendidikan Bahasa Inggris">Pendidikan Bahasa Inggris</option>
+                    <option value="Pendidikan Fisika">Pendidikan Fisika</option>
+                    <option value="Pendidikan Bahasa Indonesia">Pendidikan Bahasa Indonesia</option>
+                    <option value="PGSD">PGSD</option>
+                    <option value="Tendik">Tendik</option>
+                  </select>
+                </div>
+
+                <!-- Semester -->
+                <div class="sm:col-span-2">
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                    Semester & Tahun Akademik <span class="text-red-500">*</span>
+                  </label>
+                  <select id="semester" name="semester" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none transition">
+                    <option value="Semester Ganjil 2026/2027">Semester Ganjil 2026/2027</option>
+                    <option value="Semester Genap 2026/2027">Semester Genap 2026/2027</option>
+                    <option value="Semester Ganjil 2025/2026">Semester Ganjil 2025/2026</option>
+                    <option value="Semester Genap 2025/2026">Semester Genap 2025/2026</option>
+                  </select>
+                </div>
+
+                <!-- Tugas Tambahan Dinamis Manual -->
+                <div class="sm:col-span-2 pt-1">
+                  <div class="flex items-center justify-between mb-2">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                        Tugas Tambahan / Penugasan Khusus Institusi
+                      </label>
+                      <p class="text-[11px] text-slate-500">Masing-masing dosen/tendik dapat menambahkan baris penugasan berbeda-beda (struktural, kepanitiaan, asrama, dll).</p>
+                    </div>
+                    <button type="button" onclick="addTugasTambahanRow()" class="no-print text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 active:bg-brand-200 border border-brand-300 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition shadow-2xs">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                      <span>+ Tambah Tugas Tambahan</span>
+                    </button>
+                  </div>
+
+                  <!-- Container Baris Tugas Tambahan -->
+                  <div id="tugasTambahanContainer" class="space-y-2">
+                    <!-- Baris akan dirender secara dinamis oleh JavaScript -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-amber-700 to-amber-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">2</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Target IKU: Kontribusi Penerimaan Mahasiswa Baru (PMB)</h2>
+              <p class="text-xs text-amber-100">Jalur Reguler, Profesional, RPL, Kerjasama, KIP-K, KIP Reguler, dan Beasiswa Pemkot Surabaya</p>
+            </div>
+          </div>
+          <button type="button" onclick="addTargetRow('pmb')" class="no-print self-start sm:self-auto text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tambah Target PMB</span>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-3">
+          <p class="text-xs text-slate-500 mb-2">
+            Tuliskan rincian target kontribusi PMB ust/h per baris (misal target pada jalur tertentu, target jumlah pendaftar, atau sasaran sekolah mitra):
+          </p>
+          <div id="pmbContainer" class="space-y-2.5">
+            <!-- Baris Target PMB Dinamis -->
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">3</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Target IKU: Bidang Pengajaran</h2>
+              <p class="text-xs text-blue-100">Pengampuan mata kuliah, bimbingan tugas akhir/skripsi, pengujian munaqosyah, dan RPS OBE</p>
+            </div>
+          </div>
+          <button type="button" onclick="addTargetRow('pengajaran')" class="no-print self-start sm:self-auto text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tambah Target Pengajaran</span>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-3">
+          <p class="text-xs text-slate-500 mb-2">
+            Tuliskan target pengajaran ust/h per baris (mata kuliah yang diampu, kuota bimbingan mahasiswa, pengujian, atau implementasi pembelajaran):
+          </p>
+          <div id="pengajaranContainer" class="space-y-2.5">
+            <!-- Baris Target Pengajaran Dinamis -->
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-indigo-700 to-indigo-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">4</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Target IKU: Bidang Penelitian</h2>
+              <p class="text-xs text-indigo-100">Penelitian internal/eksternal, publikasi ilmiah, penulisan buku ajar/referensi, dan HKI (Hak Cipta/Paten)</p>
+            </div>
+          </div>
+          <button type="button" onclick="addTargetRow('penelitian')" class="no-print self-start sm:self-auto text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tambah Target Penelitian</span>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-3">
+          <p class="text-xs text-slate-500 mb-2">
+            Tuliskan target penelitian ust/h per baris (proposal penelitian internal/Kemendikbudristek, jurnal nasional/internasional bereputasi, buku ber-ISBN, atau perolehan sertifikat HKI):
+          </p>
+          <div id="penelitianContainer" class="space-y-2.5">
+            <!-- Baris Target Penelitian Dinamis -->
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">5</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Target IKU: Pengabdian kepada Masyarakat (PkM)</h2>
+              <p class="text-xs text-emerald-100">Penerapan IPTEK bagi sekolah, madrasah/pesantren mitra, industri, atau masyarakat luas</p>
+            </div>
+          </div>
+          <button type="button" onclick="addTargetRow('pkm')" class="no-print self-start sm:self-auto text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tambah Target PkM</span>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-3">
+          <p class="text-xs text-slate-500 mb-2">
+            Tuliskan target kegiatan PkM ust/h per baris (topik pelatihan/pengabdian, institusi mitra sasaran, serta luaran publikasi/HKI/modul):
+          </p>
+          <div id="pkmContainer" class="space-y-2.5">
+            <!-- Baris Target PkM Dinamis -->
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-700 to-purple-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">6</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Target IKU: Tugas Tambahan / Penunjang</h2>
+              <p class="text-xs text-purple-100">Target struktural prodi/institusi, kinerja fungsional tendik, kepanitiaan, atau asrama mahasiswa</p>
+            </div>
+          </div>
+          <button type="button" onclick="addTargetRow('tugasTambahanTarget')" class="no-print self-start sm:self-auto text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tambah Target Tugas Tambahan</span>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-3">
+          <p class="text-xs text-slate-500 mb-2">
+            Tuliskan target sasaran tugas tambahan/penunjang ust/h per baris (output kinerja, program kerja unit, akreditasi, atau target waktu penyelesaian):
+          </p>
+          <div id="tugasTambahanTargetContainer" class="space-y-2.5">
+            <!-- Baris Target Tugas Tambahan Dinamis -->
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-4 text-white flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 text-white text-sm font-bold">7</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold">Pernyataan Komitmen & Pengesahan</h2>
+              <p class="text-xs text-slate-300">Penetapan target kinerja secara sadar dan bertanggung jawab</p>
+            </div>
+          </div>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded">Sah & Mengikat</span>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-6">
+          <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700">
+            <input type="checkbox" id="komitmenCheck" required class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+            <label for="komitmenCheck" class="leading-relaxed">
+              Dengan ini saya menyatakan bahwa target Indikator Kinerja Utama (IKU) di atas telah saya susun dengan penuh kesungguhan dan berlandaskan visi misi <strong>STKIP Al Hikmah Surabaya</strong>. Saya berkomitmen untuk merealisasikan seluruh target ini dengan sebaik-baiknya demi kemajuan dakwah pendidikan dan institusi.
+            </label>
+          </div>
+
+          <!-- Tampilan Tanda Tangan (Format Cetak / Preview dengan Pejabat Otomatis) -->
+          <div class="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center text-xs">
+            
+            <!-- Kolom 1: Dosen / Tendik -->
+            <div class="flex flex-col justify-between h-40 p-4 bg-slate-50/70 rounded-xl border border-dashed border-slate-300">
+              <span class="text-slate-600 leading-tight">Surabaya, <span id="currentDateDisplay">9 September 2026</span><br><span class="font-semibold text-slate-700">Dosen / Tendik Bersangkutan,</span></span>
+              <div class="mt-auto pt-6">
+                <span id="signatureName" class="font-bold text-slate-800 underline block text-[13px]">Nama Lengkap Dosen</span>
+                <span id="signatureNidn" class="text-[11px] text-slate-500 block mt-0.5">NIDN / NUPTK: -</span>
+              </div>
+            </div>
+
+            <!-- Kolom 2: Mengetahui Kaprodi / Atasan Langsung -->
+            <div class="flex flex-col justify-between h-40 p-4 bg-slate-50/70 rounded-xl border border-dashed border-slate-300">
+              <span class="text-slate-600 leading-tight">Mengetahui,<br><span class="font-semibold text-slate-700">Ketua Program Studi / Atasan Langsung,</span></span>
+              <div class="mt-auto pt-6">
+                <span class="font-bold text-slate-800 underline block text-[13px] tracking-wider">...................................................</span>
+                <span class="text-[11px] text-slate-500 block mt-0.5">NIDN / NUPTK: .................................</span>
+              </div>
+            </div>
+
+            <!-- Kolom 3: Pejabat yang Mengesahkan (Otomatis Dr. Ahmad Syafi'i, M.Pd.) -->
+            <div class="flex flex-col justify-between h-40 p-4 bg-emerald-50/50 rounded-xl border border-emerald-300/80 shadow-xs relative">
+              <div class="absolute -top-2.5 right-3 bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">
+                Otomatis Terisi
+              </div>
+              <span class="text-slate-700 leading-tight">Mengesahkan / Menyetujui,<br><span class="font-bold text-emerald-900">Wakil Ketua I Bidang Akademik</span></span>
+              <div class="mt-auto pt-6">
+                <span class="font-bold text-slate-900 underline block text-[13px]">Dr. Ahmad Syafi'i, M.Pd.</span>
+                <span class="text-[11px] font-medium text-emerald-800 block mt-0.5">NIDN: 0712048204</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Action Buttons Bar -->
+          <div class="no-print pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200">
+            <button type="button" onclick="showResetModal()" class="w-full sm:w-auto px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition border border-slate-200">
+              Reset Isian
+            </button>
+
+            <div class="w-full sm:w-auto flex items-center gap-3">
+              <button type="button" onclick="saveDraft()" class="w-full sm:w-auto px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-200 hover:bg-slate-300 rounded-xl transition">
+                Simpan Draft
+              </button>
+              <button type="button" onclick="openPrintPreview()" class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Pratinjau & Cetak Laporan
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <!-- Modal Pratinjau Dokumen Resmi Cetak (Print Preview Modal) -->
+  <div id="printPreviewModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-300 overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-slate-800 text-white flex items-center justify-between border-b border-slate-700 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-300 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white">Pratinjau Lembar Resmi Target IKU</h3>
+            <p class="text-xs text-slate-300">Format cetak siap kirim & simpan PDF STKIP Al Hikmah Surabaya</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="printInNewWindow()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold rounded-lg transition border border-slate-600" title="Buka di tab baru jika browser Anda membatasi cetak">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            <span>Buka di Tab Baru</span>
+          </button>
+          <button type="button" onclick="closePrintPreview()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Sheet Body -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-100 flex justify-center">
+        <div id="previewSheetContent" class="bg-white p-6 sm:p-10 rounded-xl shadow-md max-w-4xl w-full border border-slate-200 text-slate-900 text-xs">
+          <!-- Render Lembar Resmi -->
+        </div>
+      </div>
+
+      <!-- Modal Footer Action Bar -->
+      <div class="px-6 py-3.5 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div class="text-xs text-slate-500">
+          Tip: Pada dialog cetak, pilih tujuan <strong>"Save as PDF" / "Simpan sebagai PDF"</strong> atau printer Anda.
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closePrintPreview()" class="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+            Kembali Edit
+          </button>
+          <button type="button" onclick="printInNewWindow()" class="sm:hidden px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-200 rounded-xl transition">
+            Tab Baru
+          </button>
+          <button type="button" onclick="printDirectly()" class="px-5 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 rounded-xl shadow transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Cetak / Unduh PDF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Konfirmasi Reset -->
+  <div id="resetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <div class="text-center">
+        <h3 class="text-base font-bold text-slate-800">Kosongkan Formulir?</h3>
+        <p class="text-xs text-slate-500 mt-1">Semua data isian dan baris target yang telah Anda tulis akan dihapus.</p>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="closeResetModal()" class="flex-1 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition">Batal</button>
+        <button type="button" onclick="executeResetForm()" class="flex-1 py-2 text-xs font-semibold bg-red-600 hover:bg-red-500 text-white rounded-xl transition">Ya, Kosongkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="no-print bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 space-y-1">
+      <p class="font-semibold text-slate-700">Sistem Informasi Target & Capaian IKU &copy; STKIP Al Hikmah Surabaya</p>
+      <p>Mencetak Pendidik Religius dan Profesional</p>
+    </div>
+  </footer>
+
+  <script>
+    // Data Pejabat Resmi yang Mengesahkan (Default Otomatis Terisi)
+    const PEJABAT_PENGESAH = {
+      nama: "Dr. Ahmad Syafi'i, M.Pd.",
+      nidn: "0712048204",
+      jabatan: "Wakil Ketua I Bidang Akademik"
+    };
+
+    // Path Logo Kampus Otomatis dari Repositori GitHub
+    const CAMPUS_LOGO_SRC = 'Logo stkiph png.png';
+    const defaultPlaceholderPhoto = "https://placehold.co/400x520/e2e8f0/475569?text=Pas+Foto+Resmi";
+
+    // Inisialisasi formulir saat dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCurrentDate();
+      attachInputSync();
+
+      // Inisialisasi baris tugas tambahan awal
+      const tugasContainer = document.getElementById('tugasTambahanContainer');
+      if (tugasContainer && tugasContainer.children.length === 0) {
+        addTugasTambahanRow();
+      }
+
+      // Cek apakah ada data draft tersimpan
+      const draftLoaded = loadDraftIfExists();
+      if (!draftLoaded) {
+        // Buat 1 baris awal untuk masing-masing seksi target
+        ['pmb', 'pengajaran', 'penelitian', 'pkm', 'tugasTambahanTarget'].forEach(sec => {
+          const container = document.getElementById(sec + 'Container');
+          if (container && container.children.length === 0) {
+            addTargetRow(sec);
+          }
+        });
+      }
+    });
+
+    function generatePrintableDocumentHTML() {
+      const nama = document.getElementById('namaGelar').value.trim() || '...................................................';
+      const nidn = document.getElementById('nidn').value.trim() || '-';
+      const prodi = document.getElementById('programStudi').value || '-';
+      const semester = document.getElementById('semester').value || 'Tahun Akademik Berjalan';
+      const photoSrc = document.getElementById('photoPreview').src || defaultPlaceholderPhoto;
+      
+      const tugasTambahan = getTugasTambahanValues();
+      const pmbTargets = getSectionTargetData('pmb');
+      const pengajaranTargets = getSectionTargetData('pengajaran');
+      const penelitianTargets = getSectionTargetData('penelitian');
+      const pkmTargets = getSectionTargetData('pkm');
+      const tugasTargets = getSectionTargetData('tugasTambahanTarget');
+
+      const today = new Date();
+      const formattedDate = today.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      // Helper tabel target
+      const renderTargetRows = (items) => {
+        if (!items || items.length === 0) {
+          return `<tr><td colspan="3" class="text-center text-slate-400 py-2 italic">Belum ada target yang dicantumkan.</td></tr>`;
+        }
+        return items.map((item, idx) => `
+          <tr>
+            <td class="text-center font-semibold w-10 py-1.5 px-2 text-slate-700">${idx + 1}</td>
+            <td class="py-1.5 px-3 text-slate-800 leading-relaxed">${escapeHtml(item.desc || '-')}</td>
+            <td class="py-1.5 px-3 font-semibold text-slate-900 w-52">${escapeHtml(item.output || '-')}</td>
+          </tr>
+        `).join('');
+      };
+
+      const renderTugasTambahan = (list) => {
+        if (!list || list.length === 0) return '<span>-</span>';
+        return list.map(item => `<div class="flex items-start gap-1.5"><span class="text-slate-400">•</span> <span>${escapeHtml(item)}</span></div>`).join('');
+      };
+
+      return `
+        <div class="official-print-wrapper bg-white text-slate-900 leading-normal" style="font-family: 'Inter', Arial, sans-serif;">
+          <!-- Kop Surat Resmi -->
+          <div class="border-b-4 border-double border-slate-900 pb-3 mb-4">
+            <div class="flex items-center justify-between gap-3 sm:gap-4">
+              <!-- Wadah Logo Resmi Kampus dari Repositori GitHub -->
+              <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
+                <img src="${CAMPUS_LOGO_SRC}" alt="Logo STKIP Al Hikmah" class="max-w-full max-h-full object-contain" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='logo.png';}">
+              </div>
+              <div class="text-center flex-1 min-w-0">
+                <h2 class="text-xs sm:text-sm md:text-[15px] font-black tracking-tight sm:tracking-normal text-slate-900 uppercase leading-snug whitespace-nowrap" style="white-space: nowrap;">SEKOLAH TINGGI KEGURUAN DAN ILMU PENDIDIKAN</h2>
+                <h1 class="text-base sm:text-lg md:text-xl font-black tracking-wider text-emerald-900 uppercase leading-snug whitespace-nowrap" style="white-space: nowrap;">AL HIKMAH SURABAYA</h1>
+                <p class="text-[10px] text-emerald-900 font-bold italic tracking-wide">Mencetak Pendidik Religius dan Profesional</p>
+                <p class="text-[10px] text-slate-600 mt-0.5">Jl. Kebonsari Elveka V, Kebonsari, Kec. Jambangan, Kota Surabaya, Jawa Timur 60233 | Telp: (031) 8288222</p>
+                <p class="text-[10px] text-slate-500">Website: https://stkipalhikmah.ac.id | Email: info@stkipalhikmah.ac.id</p>
+              </div>
+              <div class="w-16 sm:w-20 shrink-0 text-right">
+                <span class="text-[9px] font-mono border border-slate-400 px-1 py-0.5 rounded text-slate-600 uppercase">FORM-IKU</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Judul Laporan -->
+          <div class="text-center my-3">
+            <h3 class="text-sm sm:text-base font-black uppercase text-slate-900 tracking-wide underline underline-offset-4">
+              LEMBAR PENETAPAN TARGET INDIKATOR KINERJA UTAMA (IKU)
+            </h3>
+            <p class="text-[11px] font-semibold text-slate-700 mt-1 uppercase tracking-wider">
+              DOSEN & TENAGA KEPENDIDIKAN &mdash; ${escapeHtml(semester)}
+            </p>
+          </div>
+
+          <!-- Identitas Dosen / Tendik & Foto Berdampingan -->
+          <div class="my-4 border border-slate-400 rounded-lg p-3 bg-slate-50/50">
+            <div class="flex flex-row items-start gap-4">
+              <div class="w-28 h-36 border border-slate-400 rounded bg-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                <img src="${photoSrc}" alt="Foto Resmi" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 text-xs">
+                <table class="w-full border-none" style="border: none !important;">
+                  <tbody style="border: none !important;">
+                    <tr style="border: none !important;"><td style="border: none !important; width: 140px;" class="font-bold py-1 text-slate-700">Nama Lengkap & Gelar</td><td style="border: none !important;" class="py-1 font-bold text-slate-900">: ${escapeHtml(nama)}</td></tr>
+                    <tr style="border: none !important;"><td style="border: none !important;" class="font-bold py-1 text-slate-700">NIDN / NUPTK / NIP</td><td style="border: none !important;" class="py-1">: ${escapeHtml(nidn)}</td></tr>
+                    <tr style="border: none !important;"><td style="border: none !important;" class="font-bold py-1 text-slate-700">Program Studi / Status</td><td style="border: none !important;" class="py-1 font-semibold text-emerald-800">: ${escapeHtml(prodi)}</td></tr>
+                    <tr style="border: none !important;"><td style="border: none !important;" class="font-bold py-1 text-slate-700">Semester / TA</td><td style="border: none !important;" class="py-1">: ${escapeHtml(semester)}</td></tr>
+                    <tr style="border: none !important;"><td style="border: none !important; vertical-align: top;" class="font-bold py-1 text-slate-700">Tugas Tambahan</td><td style="border: none !important;" class="py-1">: <div class="inline-block align-top">${renderTugasTambahan(tugasTambahan)}</div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seksi 1: Target PMB -->
+          <div class="mb-4">
+            <div class="bg-amber-100/70 border border-amber-300 px-2.5 py-1 text-xs font-bold text-amber-900 uppercase">
+              1. Target Kontribusi Penerimaan Mahasiswa Baru (PMB)
+            </div>
+            <table class="w-full mt-1 border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="w-10 text-center py-1">No</th>
+                  <th class="text-left py-1 px-3">Uraian Target / Sasaran Jalur PMB</th>
+                  <th class="text-left py-1 px-3 w-52">Target Capaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderTargetRows(pmbTargets)}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Seksi 2: Target Pengajaran -->
+          <div class="mb-4">
+            <div class="bg-blue-100/70 border border-blue-300 px-2.5 py-1 text-xs font-bold text-blue-900 uppercase">
+              2. Target Bidang Pengajaran (Mata Kuliah, Bimbingan & Pengujian)
+            </div>
+            <table class="w-full mt-1 border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="w-10 text-center py-1">No</th>
+                  <th class="text-left py-1 px-3">Uraian Target Pengajaran / SKS / Pembimbingan</th>
+                  <th class="text-left py-1 px-3 w-52">Target Capaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderTargetRows(pengajaranTargets)}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Seksi 3: Target Penelitian -->
+          <div class="mb-4">
+            <div class="bg-indigo-100/70 border border-indigo-300 px-2.5 py-1 text-xs font-bold text-indigo-900 uppercase">
+              3. Target Bidang Penelitian, Publikasi Ilmiah & HKI
+            </div>
+            <table class="w-full mt-1 border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="w-10 text-center py-1">No</th>
+                  <th class="text-left py-1 px-3">Uraian Target Penelitian / Jurnal SINTA / Buku / HKI</th>
+                  <th class="text-left py-1 px-3 w-52">Target Capaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderTargetRows(penelitianTargets)}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Seksi 4: Target PkM -->
+          <div class="mb-4">
+            <div class="bg-emerald-100/70 border border-emerald-300 px-2.5 py-1 text-xs font-bold text-emerald-900 uppercase">
+              4. Target Bidang Pengabdian kepada Masyarakat (PkM)
+            </div>
+            <table class="w-full mt-1 border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="w-10 text-center py-1">No</th>
+                  <th class="text-left py-1 px-3">Uraian Kegiatan PkM, Sasaran Sekolah/Mitra & Luaran</th>
+                  <th class="text-left py-1 px-3 w-52">Target Capaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderTargetRows(pkmTargets)}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Seksi 5: Target Tugas Tambahan / Penunjang -->
+          <div class="mb-5">
+            <div class="bg-purple-100/70 border border-purple-300 px-2.5 py-1 text-xs font-bold text-purple-900 uppercase">
+              5. Target Tugas Tambahan / Penunjang / Kepanitiaan Institusional
+            </div>
+            <table class="w-full mt-1 border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="w-10 text-center py-1">No</th>
+                  <th class="text-left py-1 px-3">Uraian Target Kinerja Penugasan / Output Kegiatan</th>
+                  <th class="text-left py-1 px-3 w-52">Target Capaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderTargetRows(tugasTargets)}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Lembar Pengesahan & Tanda Tangan Resmi -->
+          <div class="mt-6 pt-3 border-t border-slate-400" style="page-break-inside: avoid;">
+            <p class="text-[11px] text-slate-700 mb-5 text-justify leading-relaxed">
+              Target Indikator Kinerja Utama (IKU) di atas telah disepakati dan ditetapkan bersama secara sadar dan bertanggung jawab sebagai acuan evaluasi kinerja semester berjalan di STKIP Al Hikmah Surabaya.
+            </p>
+            
+            <div class="grid grid-cols-3 gap-4 text-center text-xs">
+              <!-- TTD Dosen/Tendik -->
+              <div class="flex flex-col justify-between" style="min-height: 130px;">
+                <p class="text-slate-800 leading-tight">Surabaya, ${formattedDate}<br><span class="font-semibold">Dosen / Tendik Bersangkutan,</span></p>
+                <div class="pt-12">
+                  <p class="font-bold underline text-slate-900 text-xs">${escapeHtml(nama)}</p>
+                  <p class="text-[10px] text-slate-600 mt-0.5">NIDN / NUPTK: ${escapeHtml(nidn)}</p>
+                </div>
+              </div>
+
+              <!-- TTD Kaprodi / Atasan Langsung -->
+              <div class="flex flex-col justify-between" style="min-height: 130px;">
+                <p class="text-slate-800 leading-tight">Mengetahui,<br><span class="font-semibold">Ketua Program Studi / Atasan Langsung,</span></p>
+                <div class="pt-12">
+                  <p class="font-bold underline text-slate-900 text-xs tracking-wider">...................................................</p>
+                  <p class="text-[10px] text-slate-600 mt-0.5">NIDN / NUPTK: .................................</p>
+                </div>
+              </div>
+
+              <!-- TTD Pengesahan Resmi Otomatis: Dr. Ahmad Syafi'i, M.Pd. -->
+              <div class="flex flex-col justify-between" style="min-height: 130px;">
+                <p class="text-slate-800 leading-tight">Mengesahkan / Menyetujui,<br><span class="font-semibold text-emerald-950">${escapeHtml(PEJABAT_PENGESAH.jabatan)},</span></p>
+                <div class="pt-12">
+                  <p class="font-bold underline text-slate-900 text-xs">${escapeHtml(PEJABAT_PENGESAH.nama)}</p>
+                  <p class="text-[10px] font-medium text-slate-700 mt-0.5">NIDN: ${escapeHtml(PEJABAT_PENGESAH.nidn)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function openPrintPreview() {
+      const htmlContent = generatePrintableDocumentHTML();
+
+      // Sinkronkan ke kontainer print-only halaman utama
+      const printContainer = document.getElementById('printableDocumentArea');
+      if (printContainer) {
+        printContainer.innerHTML = htmlContent;
+      }
+
+      // Tampilkan ke dalam modal preview
+      const previewContainer = document.getElementById('previewSheetContent');
+      if (previewContainer) {
+        previewContainer.innerHTML = htmlContent;
+      }
+
+      const modal = document.getElementById('printPreviewModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closePrintPreview() {
+      const modal = document.getElementById('printPreviewModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function printDirectly() {
+      const htmlContent = generatePrintableDocumentHTML();
+      const printContainer = document.getElementById('printableDocumentArea');
+      if (printContainer) {
+        printContainer.innerHTML = htmlContent;
+      }
+
+      try {
+        window.print();
+      } catch (err) {
+        console.warn('Direct print blocked, launching in new window:', err);
+        printInNewWindow();
+      }
+    }
+
+    function printInNewWindow() {
+      const htmlContent = generatePrintableDocumentHTML();
+      const printWindow = window.open('', '_blank', 'width=900,height=800');
+
+      if (!printWindow) {
+        showToast('Izinkan pop-up pada browser Anda untuk mencetak!', 'error');
+        window.print();
+        return;
+      }
+
+      printWindow.document.open();
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="id">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Cetak Target IKU - STKIP Al Hikmah Surabaya</title>
+          <script src="https://cdn.tailwindcss.com"><\/script>
+          <style>
+            @media print {
+              body { margin: 0; padding: 0; background: #fff !important; font-size: 9pt; }
+              table { width: 100% !important; border-collapse: collapse !important; }
+              th, td { border: 1px solid #334155 !important; padding: 5px 8px !important; }
+              .no-print { display: none !important; }
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            body { font-family: 'Inter', Arial, sans-serif; background: #f8fafc; padding: 20px; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #cbd5e1; }
+          </style>
+        </head>
+        <body>
+          <div class="no-print max-w-4xl mx-auto mb-4 flex items-center justify-between bg-white p-3 rounded-lg border border-slate-300 shadow-sm">
+            <span class="text-xs font-semibold text-slate-700">Dokumen Siap Dicetak &mdash; STKIP Al Hikmah Surabaya</span>
+            <button onclick="window.print()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-bold rounded-md shadow">
+              Cetak Sekarang / Simpan PDF
+            </button>
+          </div>
+          <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 border border-slate-300 rounded-xl shadow-sm">
+            ${htmlContent}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+              }, 600);
+            };
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      showToast('Halaman cetak mandiri berhasil dibuka!', 'success');
+    }
+
+    function addTugasTambahanRow(value = '') {
+      const container = document.getElementById('tugasTambahanContainer');
+      if (!container) return;
+
+      const rowId = 'tugas_row_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-2 group transition-all';
+      row.id = rowId;
+
+      row.innerHTML = `
+        <div class="relative flex-1">
+          <input type="text" name="tugasTambahanItem" value="${escapeHtml(value)}" 
+            placeholder="Contoh: Kaprodi PGSD / Pembina Asrama Mahasiswa / Panitia PMB / Staf BAAK"
+            class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none transition">
+        </div>
+        <button type="button" onclick="removeTugasTambahanRow('${rowId}')" title="Hapus baris penugasan ini"
+          class="no-print p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition border border-transparent hover:border-red-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+      `;
+
+      container.appendChild(row);
+    }
+
+    function removeTugasTambahanRow(rowId) {
+      const container = document.getElementById('tugasTambahanContainer');
+      const row = document.getElementById(rowId);
+      if (row && container) {
+        if (container.children.length === 1) {
+          const input = row.querySelector('input');
+          if (input) input.value = '';
+        } else {
+          container.removeChild(row);
+        }
+      }
+    }
+
+    function getTugasTambahanValues() {
+      const inputs = document.querySelectorAll('input[name="tugasTambahanItem"]');
+      const list = [];
+      inputs.forEach(input => {
+        const val = input.value.trim();
+        if (val) list.push(val);
+      });
+      return list;
+    }
+
+    function setTugasTambahanValues(items = []) {
+      const container = document.getElementById('tugasTambahanContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!items || items.length === 0) {
+        addTugasTambahanRow('');
+      } else {
+        items.forEach(item => addTugasTambahanRow(item));
+      }
+    }
+
+    // Konfigurasi placeholder khusus per IKU
+    const targetPlaceholders = {
+      pmb: {
+        desc: "Contoh: Merekrut 5 calon mahasiswa baru kelas reguler dari SMA/MA mitra di Surabaya & Sidoarjo",
+        output: "Target: 5 Calon Mahasiswa"
+      },
+      pengajaran: {
+        desc: "Contoh: Mengampu MK Metodologi Penelitian Pendidikan (3 SKS) berbasis OBE Case Method",
+        output: "Target: 3 SKS / 1 Kelas"
+      },
+      penelitian: {
+        desc: "Contoh: Penelitian Hibah Internal STKIP / Hibah Kemendikbudristek, Publikasi Jurnal SINTA 2, Buku Ajar ISBN, atau Hak Cipta (HKI)",
+        output: "Target: 1 Judul / 1 Jurnal SINTA / 1 HKI"
+      },
+      pkm: {
+        desc: "Contoh: Pelatihan model pembelajaran Deep Learning untuk 35 guru SD mitra di Jambangan, Surabaya",
+        output: "Target: 1 Kegiatan & 1 Jurnal SINTA"
+      },
+      tugasTambahanTarget: {
+        desc: "Contoh: Menyelesaikan dokumen LKPS & LED Akreditasi Program Studi ke LAMDIK",
+        output: "Target: Dokumen Final LAMDIK"
+      }
+    };
+
+    function addTargetRow(section, descVal = '', outputVal = '') {
+      const container = document.getElementById(section + 'Container');
+      if (!container) return;
+
+      const ph = targetPlaceholders[section] || { desc: "Sebutkan target yang ingin dicapai...", output: "Target Capaian" };
+      const rowId = section + '_row_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const row = document.createElement('div');
+      row.className = 'target-item-row flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-2.5 sm:p-2 bg-slate-50/80 rounded-xl border border-slate-200 hover:border-slate-300 transition';
+      row.id = rowId;
+
+      row.innerHTML = `
+        <div class="flex items-center gap-2 sm:w-auto">
+          <span class="row-badge w-6 h-6 rounded-lg bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center shrink-0">1</span>
+        </div>
+        <div class="flex-1">
+          <input type="text" name="${section}_desc" value="${escapeHtml(descVal)}" 
+            placeholder="${ph.desc}"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+        </div>
+        <div class="sm:w-64">
+          <input type="text" name="${section}_output" value="${escapeHtml(outputVal)}" 
+            placeholder="${ph.output}"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 placeholder-slate-400 focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+        </div>
+        <button type="button" onclick="removeTargetRow('${rowId}', '${section}')" title="Hapus target ini"
+          class="no-print self-end sm:self-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition border border-transparent hover:border-red-200 shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+      `;
+
+      container.appendChild(row);
+      renumberRows(section);
+    }
+
+    function removeTargetRow(rowId, section) {
+      const container = document.getElementById(section + 'Container');
+      const row = document.getElementById(rowId);
+      if (row && container) {
+        if (container.children.length === 1) {
+          const inputs = row.querySelectorAll('input');
+          inputs.forEach(i => i.value = '');
+        } else {
+          container.removeChild(row);
+        }
+        renumberRows(section);
+      }
+    }
+
+    function renumberRows(section) {
+      const container = document.getElementById(section + 'Container');
+      if (!container) return;
+      const rows = container.querySelectorAll('.target-item-row');
+      rows.forEach((row, idx) => {
+        const badge = row.querySelector('.row-badge');
+        if (badge) badge.textContent = idx + 1;
+      });
+    }
+
+    function getSectionTargetData(section) {
+      const container = document.getElementById(section + 'Container');
+      if (!container) return [];
+      const rows = container.querySelectorAll('.target-item-row');
+      const result = [];
+      rows.forEach(row => {
+        const descInput = row.querySelector(`input[name="${section}_desc"]`);
+        const outputInput = row.querySelector(`input[name="${section}_output"]`);
+        const desc = descInput ? descInput.value.trim() : '';
+        const output = outputInput ? outputInput.value.trim() : '';
+        if (desc || output) {
+          result.push({ desc, output });
+        }
+      });
+      return result;
+    }
+
+    function setSectionTargetData(section, items = []) {
+      const container = document.getElementById(section + 'Container');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!items || items.length === 0) {
+        addTargetRow(section);
+      } else {
+        items.forEach(item => addTargetRow(section, item.desc || '', item.output || ''));
+      }
+      renumberRows(section);
+    }
+
+    function escapeHtml(string) {
+      if (!string) return '';
+      return String(string).replace(/"/g, '&quot;');
+    }
+
+    function updateCurrentDate() {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const today = new Date();
+      const dateEl = document.getElementById('currentDateDisplay');
+      if (dateEl) {
+        dateEl.textContent = today.toLocaleDateString('id-ID', options);
+      }
+    }
+
+    function attachInputSync() {
+      const namaInput = document.getElementById('namaGelar');
+      const nidnInput = document.getElementById('nidn');
+
+      namaInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        document.getElementById('signatureName').textContent = val ? val : 'Nama Lengkap Dosen';
+      });
+
+      nidnInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        document.getElementById('signatureNidn').textContent = val ? `NIDN / NUPTK: ${val}` : 'NIDN / NUPTK: -';
+      });
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        if (!file.type.startsWith('image/')) {
+          showToast('Harap pilih file gambar (JPG, PNG, atau WebP)!', 'error');
+          return;
+        }
+        if (file.size > 3 * 1024 * 1024) {
+          showToast('Ukuran gambar maksimal 3MB', 'error');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('photoPreview').src = e.target.result;
+          showToast('Foto resmi berhasil diperbarui', 'success');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function resetPhoto() {
+      document.getElementById('photoPreview').src = defaultPlaceholderPhoto;
+      document.getElementById('photoInput').value = '';
+      showToast('Foto dikembalikan ke default', 'info');
+    }
+
+    function fillDemoData() {
+      document.getElementById('namaGelar').value = "Dr. H. Ahmad Faiz, M.Pd.";
+      document.getElementById('nidn').value = "0712048502";
+      document.getElementById('programStudi').value = "PGSD";
+      document.getElementById('semester').value = "Semester Ganjil 2026/2027";
+      
+      // Tugas Tambahan
+      setTugasTambahanValues([
+        "Ketua Program Studi PGSD",
+        "Koordinator Penjaminan Mutu & Kurikulum OBE",
+        "Panitia PMB Jalur Beasiswa Pemkot Surabaya & RPL"
+      ]);
+
+      // Target PMB
+      setSectionTargetData('pmb', [
+        { desc: "Sosialisasi dan penjaringan mahasiswa baru kelas reguler dari SMA/MA mitra di Surabaya & Sidoarjo", output: "Target: 5 Calon Mahasiswa" },
+        { desc: "Sosialisasi program RPL dan Kelas Profesional ke yayasan dan sekolah Al Hikmah Network", output: "Target: 4 Calon Mahasiswa" },
+        { desc: "Mengawal seleksi berkas calon mahasiswa jalur Beasiswa Pemkot Surabaya & KIP-K", output: "Target: 4 Calon Mahasiswa" }
+      ]);
+
+      // Target Pengajaran
+      setSectionTargetData('pengajaran', [
+        { desc: "Mengampu mata kuliah Metodologi Penelitian Pendidikan (3 SKS) berbasis OBE Case Method", output: "Target: 1 Kelas (3 SKS)" },
+        { desc: "Mengampu mata kuliah Desain Pembelajaran Inovatif PGSD (3 SKS) dengan Team-Based Project", output: "Target: 2 Kelas (6 SKS)" },
+        { desc: "Membimbing mahasiswa skripsi hingga tuntas sidang munaqosyah semester ini", output: "Target: 6 Mahasiswa" },
+        { desc: "Menguji sidang proposal dan sidang skripsi sarjana pendidikan", output: "Target: 8 Mahasiswa" }
+      ]);
+
+      // Target Penelitian
+      setSectionTargetData('penelitian', [
+        { desc: "Penelitian kolaboratif dosen-mahasiswa bertema integrasi adab dan asesmen autentik pada kurikulum merdeka", output: "Target: 1 Hibah Penelitian Internal" },
+        { desc: "Publikasi artikel ilmiah pada Jurnal Nasional Terakreditasi SINTA 2 atau SINTA 3", output: "Target: 1 Artikel Terbit" },
+        { desc: "Pendaftaran Hak Cipta (HKI) modul ajar pendidikan karakter berbasis nilai Islam ke DJKI", output: "Target: 1 Sertifikat HKI" },
+        { desc: "Penyusunan dan penerbitan buku ajar referensi perguruan tinggi ber-ISBN", output: "Target: 1 Buku ISBN" }
+      ]);
+
+      // Target PkM
+      setSectionTargetData('pkm', [
+        { desc: "Pelatihan implementasi model pembelajaran Deep Learning berbasis nilai akhlak bagi guru SD mitra di Jambangan", output: "Target: 35 Guru SD Mitra" },
+        { desc: "Publikasi artikel hasil pengabdian masyarakat pada jurnal nasional terindeks SINTA", output: "Target: 1 Artikel Terbit SINTA" }
+      ]);
+
+      // Target Tugas Tambahan
+      setSectionTargetData('tugasTambahanTarget', [
+        { desc: "Menyelesaikan penyusunan dokumen LKPS & LED Akreditasi Program Studi ke LAMDIK", output: "Target: Dokumen Siap Submit" },
+        { desc: "Koordinasi pelaksanaan audit mutu internal (AMI) prodi dan evaluasi perkuliahan tengah semester", output: "Target: 100% Terlaksana" },
+        { desc: "Kepanitiaan resmi institusional pada pelaksanaan Wisuda Sarjana STKIP Al Hikmah", output: "Target: Selesai Tepat Waktu" }
+      ]);
+
+      document.getElementById('komitmenCheck').checked = true;
+      document.getElementById('signatureName').textContent = "Dr. H. Ahmad Faiz, M.Pd.";
+      document.getElementById('signatureNidn').textContent = "NIDN / NUPTK: 0712048502";
+      document.getElementById('photoPreview').src = "https://placehold.co/400x520/14532d/ffffff?text=Dr.+Faiz,+M.Pd.";
+
+      showToast('Data contoh target dosen & tendik berhasil diisi!', 'success');
+    }
+
+    function saveDraft() {
+      const formData = {
+        namaGelar: document.getElementById('namaGelar').value,
+        nidn: document.getElementById('nidn').value,
+        programStudi: document.getElementById('programStudi').value,
+        semester: document.getElementById('semester').value,
+        tugasTambahanList: getTugasTambahanValues(),
+
+        pmbTargets: getSectionTargetData('pmb'),
+        pengajaranTargets: getSectionTargetData('pengajaran'),
+        penelitianTargets: getSectionTargetData('penelitian'),
+        pkmTargets: getSectionTargetData('pkm'),
+        tugasTambahanTargets: getSectionTargetData('tugasTambahanTarget'),
+
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        localStorage.setItem('stkip_iku_draft_v3', JSON.stringify(formData));
+        showToast('Draft seluruh target IKU berhasil disimpan!', 'success');
+      } catch (err) {
+        showToast('Gagal menyimpan draft.', 'error');
+      }
+    }
+
+    function loadDraftIfExists() {
+      try {
+        const saved = localStorage.getItem('stkip_iku_draft_v3');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.namaGelar) document.getElementById('namaGelar').value = data.namaGelar;
+          if (data.nidn) document.getElementById('nidn').value = data.nidn;
+          if (data.programStudi) document.getElementById('programStudi').value = data.programStudi;
+          if (data.semester) document.getElementById('semester').value = data.semester;
+
+          setTugasTambahanValues(data.tugasTambahanList || []);
+          setSectionTargetData('pmb', data.pmbTargets || []);
+          setSectionTargetData('pengajaran', data.pengajaranTargets || []);
+          setSectionTargetData('penelitian', data.penelitianTargets || []);
+          setSectionTargetData('pkm', data.pkmTargets || []);
+          setSectionTargetData('tugasTambahanTarget', data.tugasTambahanTargets || []);
+
+          if (data.namaGelar) {
+            document.getElementById('signatureName').textContent = data.namaGelar;
+          }
+          if (data.nidn) {
+            document.getElementById('signatureNidn').textContent = `NIDN / NUPTK: ${data.nidn}`;
+          }
+          return true;
+        }
+      } catch (e) {
+        console.error('Draft parsing error:', e);
+      }
+      return false;
+    }
+
+    function showResetModal() {
+      const modal = document.getElementById('resetModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      const modal = document.getElementById('resetModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function executeResetForm() {
+      closeResetModal();
+      document.getElementById('ikuForm').reset();
+      resetPhoto();
+      setTugasTambahanValues(['']);
+      ['pmb', 'pengajaran', 'penelitian', 'pkm', 'tugasTambahanTarget'].forEach(sec => setSectionTargetData(sec, []));
+
+      document.getElementById('signatureName').textContent = 'Nama Lengkap Dosen';
+      document.getElementById('signatureNidn').textContent = 'NIDN / NUPTK: -';
+
+      try {
+        localStorage.removeItem('stkip_iku_draft_v3');
+      } catch(e) {}
+      showToast('Formulir berhasil dikosongkan', 'info');
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      saveDraft();
+      openPrintPreview();
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toastNotification');
+      const msgEl = document.getElementById('toastMessage');
+      const iconEl = document.getElementById('toastIcon');
+
+      msgEl.textContent = message;
+
+      if (type === 'success') {
+        iconEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+      } else if (type === 'error') {
+        iconEl.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+      } else {
+        iconEl.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
